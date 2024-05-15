@@ -1,11 +1,12 @@
 import customtkinter as ctk
 from generate_values import *
+from PIL import Image, ImageTk
 
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme('dark-blue')
 
 window = ctk.CTk()
-window.title("Viagem Conforto")
+window.title("Clima Travel")
 window.geometry('500x300')
 
 def change_theme():
@@ -20,6 +21,8 @@ def submit():
     if month_selected != 'Selecione um mês:' and city_selected != 'Selecione uma cidade:' :
         result = (find_values(month_selected, city_selected))
         dialog_result(result)
+    else:
+        dialog_error("Preencha todos os campos!")
 
 def get_month():
     return month.get()
@@ -27,9 +30,18 @@ def get_month():
 def get_city():
     return city.get()
 
+def dialog_error(message: str):
+    dialog = ctk.CTk()
+    dialog.title("Modal")
+    dialog.geometry('300x100')
+
+    month_value = ctk.CTkLabel(dialog, text=message)
+    month_value.pack(pady=10)
+
 def dialog_result(result: dict):
     dialog = ctk.CTk()
     dialog.title("Modal")
+    dialog.geometry('300x300')
 
     month_value = ctk.CTkLabel(dialog, text=f"Mês: {result['month']}")
     month_value.pack(pady=10)
@@ -46,7 +58,7 @@ def dialog_result(result: dict):
     wind_value = ctk.CTkLabel(dialog, text=f"Vento: {result['wind']}")
     wind_value.pack(pady=10)
 
-title = ctk.CTkLabel(window, text="Bem vindo ao Viagem Conforto")
+title = ctk.CTkLabel(window, text="Bem vindo ao Clima Travel")
 title.pack(pady=10)
 
 subtitle = ctk.CTkLabel(window, text="Selecione o local e mês da sua viagem:")
@@ -67,5 +79,13 @@ send.pack(pady=10)
 
 send = ctk.CTkButton(window, text = "TEMA", command=change_theme)
 send.pack(pady=10)
+
+image = Image.open("./assets/images.jpeg") 
+
+tk_image = ImageTk.PhotoImage(image)
+
+# Create a label widget to display the image
+image_label = ctk.CTkLabel(window, image=tk_image)
+image_label.pack()
 
 window.mainloop()
